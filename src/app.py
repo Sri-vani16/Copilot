@@ -21,6 +21,42 @@ app.mount("/static", StaticFiles(directory=os.path.join(Path(__file__).parent,
 
 # In-memory activity database
 activities = {
+    "Basketball Team": {
+        "description": "Join the basketball team and compete in inter-school tournaments",
+        "schedule": "Tuesdays and Thursdays, 4:00 PM - 6:00 PM",
+        "max_participants": 15,
+        "participants": ["james@mergington.edu", "lily@mergington.edu"]
+    },
+    "Swimming Club": {
+        "description": "Improve your swimming skills and participate in swim meets",
+        "schedule": "Mondays and Wednesdays, 3:30 PM - 5:00 PM",
+        "max_participants": 10,
+        "participants": ["lucas@mergington.edu", "mia@mergington.edu"]
+    },
+    "Drama Club": {
+        "description": "Explore acting and stage performance through plays and skits",
+        "schedule": "Fridays, 4:00 PM - 5:30 PM",
+        "max_participants": 20,
+        "participants": ["amelia@mergington.edu", "noah@mergington.edu"]
+    },
+    "Art Workshop": {
+        "description": "Learn painting, sketching, and other artistic techniques",
+        "schedule": "Wednesdays, 3:30 PM - 5:00 PM",
+        "max_participants": 15,
+        "participants": ["harper@mergington.edu", "jackson@mergington.edu"]
+    },
+    "Math Club": {
+        "description": "Solve challenging math problems and prepare for math competitions",
+        "schedule": "Thursdays, 3:30 PM - 4:30 PM",
+        "max_participants": 25,
+        "participants": ["ethan@mergington.edu", "ava@mergington.edu"]
+    },
+    "Science Club": {
+        "description": "Conduct experiments and explore scientific concepts",
+        "schedule": "Tuesdays, 4:00 PM - 5:00 PM",
+        "max_participants": 20,
+        "participants": ["logan@mergington.edu", "isabella@mergington.edu"]
+    },
     "Chess Club": {
         "description": "Learn strategies and compete in chess tournaments",
         "schedule": "Fridays, 3:30 PM - 5:00 PM",
@@ -55,6 +91,10 @@ def get_activities():
 @app.post("/activities/{activity_name}/signup")
 def signup_for_activity(activity_name: str, email: str):
     """Sign up a student for an activity"""
+    #validate sutdent is not already signed up
+    for activity in activities.values():
+        if email in activity["participants"]:
+            raise HTTPException(status_code=400, detail="Student already signed up for an activity")
     # Validate activity exists
     if activity_name not in activities:
         raise HTTPException(status_code=404, detail="Activity not found")
